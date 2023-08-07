@@ -13,7 +13,7 @@ describe('API Testing', () => {
   formattedNewDate = formattedNewDate.split("/").join("-");
   const fileNameWithDate = `download/data-${formattedNewDate}.json`;
   it('should fetch data from an API', () => {
-    cy.request('GET', 'http://localhost:3000/api/getAllData') 
+    cy.request('GET', 'https://get-count.onrender.com/api/getAllData') 
       .then((response) => {
         expect(response.status).to.equal(200); 
         const data = response.body;
