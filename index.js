@@ -128,9 +128,10 @@ const getCount = async () => {
 
 
 app.post('/api/run', async(req, res) => {
-  await runProcessExec(res);
+  const result = await runProcessExec(res);
   setTimeout(() => {
-    res.sendStatus(200);
+    //res.sendStatus(200);
+    res.json(result);
     getCount();
   }, 10000);
 });
