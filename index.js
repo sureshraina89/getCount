@@ -4,7 +4,6 @@ const exec = require('child_process').exec;
 const path = require('path');
 const fs = require('fs');
 const cron = require('node-cron');
-const cypress = require('cypress');
 
 const app = express();
 app.use(cors()); // Enable CORS for all routes
@@ -189,23 +188,14 @@ app.listen(PORT, () => {
 });
 
 async function runProcessExec(res) {
-  // await exec('npx cypress run --headless', (error, stdout, stderr) => {
-  //   if (error) {
-  //     console.error(`Cypress execution failed: ${error}`);
-  //     return;
-  //   }
+  await exec('npx cypress run --headless', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Cypress execution failed: ${error}`);
+      return;
+    }
 
-  //   console.log(stdout);
-  // });
-  try {
-    const results = await cypress.run({
-      configFile: false, // Do not use any Cypress config file
-      spec: 'cypress/e2e/chartink.cy.js', // Path to your Cypress test script
-    });
-
-    console.log('Cypress run finished:', results);
-  } catch (error) {
-    console.error('Error while running Cypress:', error);
-  }
+    console.log(stdout);
+  });
+  
 }
 
