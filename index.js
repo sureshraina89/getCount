@@ -18,7 +18,7 @@ let formattedNewDate = currentDate.toLocaleString('en-GB', {
   month: '2-digit',
   year: 'numeric'
 });
-formattedNewDate = formattedNewDate.replaceAll('/', '-');
+formattedNewDate = formattedNewDate.split("/").join("-");
 const filePath = `download/data-${formattedNewDate}.json`;
 
 

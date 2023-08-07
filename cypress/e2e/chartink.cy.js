@@ -10,7 +10,7 @@ describe('API Testing', () => {
     month: '2-digit',
     year: 'numeric'
   });
-  formattedNewDate = formattedNewDate.replaceAll('/', '-');
+  formattedNewDate = formattedNewDate.split("/").join("-");
   const fileNameWithDate = `download/data-${formattedNewDate}.json`;
   it('should fetch data from an API', () => {
     cy.request('GET', 'http://localhost:3000/api/getAllData') 
