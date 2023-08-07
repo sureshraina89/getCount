@@ -10,7 +10,7 @@ const app = express();
 app.use(cors()); // Enable CORS for all routes
 const PORT = 3000; // Replace with your desired port number
 const admin = require('firebase-admin');
-const config = 'configuration';
+const config = 'newConfiguration';
 
 const currentDate = new Date();
 let formattedNewDate = currentDate.toLocaleString('en-GB', {
