@@ -135,10 +135,10 @@ const getCount = async () => {
 app.post('/api/run', async(req, res) => {
   const result = await runProcessExec();
   res.json(result);
-  setTimeout(() => {
-    //res.sendStatus(200);
-    getCount();
-  }, 10000);
+  // setTimeout(() => {
+  //   //res.sendStatus(200);
+  //   getCount();
+  // }, 10000);
 });
 
 app.post('/api/edit/:id/:index', async(req, res) => {
