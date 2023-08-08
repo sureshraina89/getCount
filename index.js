@@ -200,27 +200,30 @@ async function runProcessExec() {
   console.log(configList);
   resultList=[];
   configList.forEach(async (item) => {
-    //item.url
-    const browser = await puppeteer.launch({ headless: 'new'});
+    if(puppeteer) {
 
-    // Open a new browser page
-    const page = await browser.newPage();
-
-    // Navigate to the desired URL
-    //const url = 'https://chartink.com/screener/weekly-rsi-overbought-oversold-scan'; // Replace with the URL you want to visit
-    await page.goto(item.url);
-
-    // Get the value of an input element using its selector
-    const inputValue = await page.$eval('#DataTables_Table_0_info', (input) => {
-    const text = input.textContent;
-    resultList.push({name: item.name, count: text.split(' ')[1] ? text.split(' ')[1].replace(',', ''): text.split(' ')[1]});
-  });
-
-  console.log('Input element value:', resultList);
-  // Capture a screenshot (optional)
-  //await page.screenshot({ path: 'example.png' });
-  // Close the browser
-  await browser.close();
+      //item.url
+      const browser = await puppeteer.launch({ headless: 'new'});
+  
+      // Open a new browser page
+      const page = await browser.newPage();
+  
+      // Navigate to the desired URL
+      //const url = 'https://chartink.com/screener/weekly-rsi-overbought-oversold-scan'; // Replace with the URL you want to visit
+      await page.goto(item.url);
+  
+      // Get the value of an input element using its selector
+      const inputValue = await page.$eval('#DataTables_Table_0_info', (input) => {
+      const text = input.textContent;
+      resultList.push({name: item.name, count: text.split(' ')[1] ? text.split(' ')[1].replace(',', ''): text.split(' ')[1]});
+    });
+  
+    console.log('Input element value:', resultList);
+    // Capture a screenshot (optional)
+    //await page.screenshot({ path: 'example.png' });
+    // Close the browser
+    await browser.close();
+    }
 });
 return resultList;
 // await exec('npx cypress run --headless', (error, stdout, stderr) => {
