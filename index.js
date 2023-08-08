@@ -132,13 +132,19 @@ const getCount = async () => {
 };
 
 
-app.post('/api/run', async(req, res) => {
+app.get('/api/run', async(req, res) => {
   const result = await runProcessExec();
   res.json(result);
   // setTimeout(() => {
   //   //res.sendStatus(200);
   //   getCount();
   // }, 10000);
+});
+
+// GET all configList
+app.get('/api/getAllData', async (req, res) => {
+  //const documentId = 'sHwbC30hSIQ8AD5oAhyl'; // Provide an existing document ID
+  res.json(await getAllDocuments(config));
 });
 
 app.post('/api/edit/:id/:index', async(req, res) => {
@@ -162,11 +168,7 @@ app.post("/api/saveData", async (req, res) => {
   res.sendStatus(200);
 });
 
-// GET all configList
-app.get('/api/getAllData', async (req, res) => {
-  //const documentId = 'sHwbC30hSIQ8AD5oAhyl'; // Provide an existing document ID
-  res.json(await getAllDocuments(config));
-});
+
 
 // GET all configList
 app.get('/api/getCount', async (req, res) => {
