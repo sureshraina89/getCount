@@ -221,8 +221,6 @@ async function runProcessExec() {
       return text.split(' ')[1] ? text.split(' ')[1].replace(',', ''): text.split(' ')[1]; 
     });
     resultList.push({name: item.name, count: inputValue});
-    });
-  
     console.log('Input element value:', resultList);
     // Capture a screenshot (optional)
     //await page.screenshot({ path: 'example.png' });
