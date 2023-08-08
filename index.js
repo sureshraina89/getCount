@@ -4,6 +4,7 @@ const exec = require('child_process').exec;
 const path = require('path');
 const fs = require('fs');
 const cron = require('node-cron');
+const puppeteer = require('puppeteer');
 
 const app = express();
 app.use(cors()); // Enable CORS for all routes
@@ -39,15 +40,19 @@ const db = admin.firestore();
 app.use(express.json());
 
 let dataList = null;
+let configList = null;
+let resultList = [];
+
+
 
 // Define the time for the job to run (every day at 8:00 PM)
 const scheduleTime = '0 18 * * *'; // 'minute hour day month day_of_week' (e.g., '0 20 * * *' for 8:00 PM every day)
 const mrgscheduleTime = '1 0 * * *'; // 'minute hour day month day_of_week' (e.g., '0 20 * * *' for 8:00 PM every day)
 
 // Function to be executed as the job
-function myJob() {
+async function myJob() {
   console.log('calling job');
-  runProcessExec();
+  await runProcessExec();
   console.log('Job executed at', new Date().toLocaleString());
   // Add your job logic here
 }
@@ -59,8 +64,9 @@ cron.schedule(mrgscheduleTime, myJob);
 
 const getAllDocuments = async (collectionName) => {
   const snapshot = await db.collection(collectionName).get();
-  getCount();
   const documents = snapshot.docs.map(doc => doc.data());
+  getCount();
+  configList = documents;
   return documents;
 };
 
@@ -127,7 +133,7 @@ const getCount = async () => {
 
 
 app.post('/api/run', async(req, res) => {
-  const result = await runProcessExec(res);
+  const result = await runProcessExec();
   setTimeout(() => {
     //res.sendStatus(200);
     res.json(result);
@@ -187,15 +193,44 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-async function runProcessExec(res) {
-  await exec('npx cypress run --headless', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Cypress execution failed: ${error}`);
-      return;
-    }
+async function runProcessExec() {
+  if(!configList) {
+    await getAllDocuments(config);
+  }
+  console.log(configList);
+  resultList=[];
+  configList.forEach(async (item) => {
+    //item.url
+    const browser = await puppeteer.launch({ headless: 'new'});
 
-    console.log(stdout);
+    // Open a new browser page
+    const page = await browser.newPage();
+
+    // Navigate to the desired URL
+    //const url = 'https://chartink.com/screener/weekly-rsi-overbought-oversold-scan'; // Replace with the URL you want to visit
+    await page.goto(item.url);
+
+    // Get the value of an input element using its selector
+    const inputValue = await page.$eval('#DataTables_Table_0_info', (input) => {
+    const text = input.textContent;
+    resultList.push({name: item.name, count: text.split(' ')[1] ? text.split(' ')[1].replace(',', ''): text.split(' ')[1]});
   });
-  
+
+  console.log('Input element value:', resultList);
+  // Capture a screenshot (optional)
+  //await page.screenshot({ path: 'example.png' });
+});
+// Close the browser
+await browser.close();
+return resultList;
+// await exec('npx cypress run --headless', (error, stdout, stderr) => {
+  //   if (error) {
+  //     console.error(`Cypress execution failed: ${error}`);
+  //     return;
+  //   }
+
+  //   console.log(stdout);
+  // });
 }
+
 
