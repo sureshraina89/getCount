@@ -219,9 +219,9 @@ async function runProcessExec() {
   console.log('Input element value:', resultList);
   // Capture a screenshot (optional)
   //await page.screenshot({ path: 'example.png' });
+  // Close the browser
+  await browser.close();
 });
-// Close the browser
-await browser.close();
 return resultList;
 // await exec('npx cypress run --headless', (error, stdout, stderr) => {
   //   if (error) {
