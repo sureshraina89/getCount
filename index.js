@@ -227,7 +227,7 @@ async function runProcessExec() {
     // Close the browser
     await browser.close();
 });
-return resultList;
+return resultList; 
 // await exec('npx cypress run --headless', (error, stdout, stderr) => {
   //   if (error) {
   //     console.error(`Cypress execution failed: ${error}`);
