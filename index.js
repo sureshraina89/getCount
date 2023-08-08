@@ -4,7 +4,7 @@ const exec = require('child_process').exec;
 const path = require('path');
 const fs = require('fs');
 const cron = require('node-cron');
-const puppeteer = require('puppeteer');
+const { chromium } = require('playwright');
 
 const app = express();
 app.use(cors()); // Enable CORS for all routes
@@ -200,20 +200,24 @@ async function runProcessExec() {
   console.log(configList);
   resultList=[];
   configList.forEach(async (item) => {
-    if(puppeteer) {
-
+    if(chromium) {
       //item.url
-      const browser = await puppeteer.launch({ headless: 'new'});
+      const browser = await chromium.launch();
   
-      // Open a new browser page
-      const page = await browser.newPage();
-  
+       // Create a new browser context
+      const context = await browser.newContext();
+
+      // Create a new page
+      const page = await context.newPage();
+
       // Navigate to the desired URL
       //const url = 'https://chartink.com/screener/weekly-rsi-overbought-oversold-scan'; // Replace with the URL you want to visit
       await page.goto(item.url);
   
+        // Wait for the div element to appear
+      await page.waitForSelector('#DataTables_Table_0_info');
       // Get the value of an input element using its selector
-      const inputValue = await page.$eval('#DataTables_Table_0_info', (input) => {
+      await page.$eval('#DataTables_Table_0_info', (input) => {
       const text = input.textContent;
       resultList.push({name: item.name, count: text.split(' ')[1] ? text.split(' ')[1].replace(',', ''): text.split(' ')[1]});
     });
