@@ -196,7 +196,7 @@ app.listen(PORT, () => {
 });
 
 async function runProcessExec() {
-  configList = await getAllDocuments(config);
+  configList = [{"id":4,"name":"oversold","url":"https://chartink.com/screener/weekly-rsi-overbought-oversold-scan"},{"name":"RSI Oversold","id":4,"url":"https://chartink.com/screener/rsi-overbought-or-oversold-scan"},{"name":"Bullish-rsi-stochastic","id":3,"url":"https://chartink.com/screener/bullish-rsi-stochastic"}];
   console.log(configList);
   resultList=[];
   configList.forEach(async (item) => {
