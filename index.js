@@ -196,13 +196,10 @@ app.listen(PORT, () => {
 });
 
 async function runProcessExec() {
-  if(!configList) {
-    await getAllDocuments(config);
-  }
+  configList = await getAllDocuments(config);
   console.log(configList);
   resultList=[];
   configList.forEach(async (item) => {
-    if(chromium) {
       //item.url
       const browser = await chromium.launch();
   
@@ -229,7 +226,6 @@ async function runProcessExec() {
     //await page.screenshot({ path: 'example.png' });
     // Close the browser
     await browser.close();
-    }
 });
 return resultList;
 // await exec('npx cypress run --headless', (error, stdout, stderr) => {
