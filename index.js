@@ -199,15 +199,15 @@ async function runProcessExec() {
   configList = [{"id":4,"name":"oversold","url":"https://chartink.com/screener/weekly-rsi-overbought-oversold-scan"},{"name":"RSI Oversold","id":4,"url":"https://chartink.com/screener/rsi-overbought-or-oversold-scan"},{"name":"Bullish-rsi-stochastic","id":3,"url":"https://chartink.com/screener/bullish-rsi-stochastic"}];
   console.log(configList);
   resultList=[];
-  configList.forEach(async (item) => {
-      //item.url
-      const browser = await chromium.launch();
-  
-       // Create a new browser context
-      const context = await browser.newContext();
+  //item.url
+  const browser = await chromium.launch();
 
-      // Create a new page
-      const page = await context.newPage();
+   // Create a new browser context
+  const context = await browser.newContext();
+
+  // Create a new page
+  const page = await context.newPage();
+  configList.forEach(async (item) => {
 
       // Navigate to the desired URL
       //const url = 'https://chartink.com/screener/weekly-rsi-overbought-oversold-scan'; // Replace with the URL you want to visit
@@ -225,9 +225,9 @@ async function runProcessExec() {
     // Capture a screenshot (optional)
     //await page.screenshot({ path: 'example.png' });
     // Close the browser
-    await browser.close();
-});
-return resultList; 
+  });
+  await browser.close();
+  return resultList; 
 // await exec('npx cypress run --headless', (error, stdout, stderr) => {
   //   if (error) {
   //     console.error(`Cypress execution failed: ${error}`);
