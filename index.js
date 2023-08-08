@@ -216,9 +216,11 @@ async function runProcessExec() {
         // Wait for the div element to appear
       await page.waitForSelector('#DataTables_Table_0_info');
       // Get the value of an input element using its selector
-      await page.$eval('#DataTables_Table_0_info', (input) => {
+      const inputValue =  await page.$eval('#DataTables_Table_0_info', (input) => {
       const text = input.textContent;
-      resultList.push({name: item.name, count: text.split(' ')[1] ? text.split(' ')[1].replace(',', ''): text.split(' ')[1]});
+      return text.split(' ')[1] ? text.split(' ')[1].replace(',', ''): text.split(' ')[1]; 
+    });
+    resultList.push({name: item.name, count: inputValue});
     });
   
     console.log('Input element value:', resultList);
